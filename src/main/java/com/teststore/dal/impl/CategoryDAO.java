@@ -24,4 +24,9 @@ public class CategoryDAO extends GenericDAO<Category>{
             System.out.println(category);
         }
     }
+
+    @Override
+    public int insert(Category t) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

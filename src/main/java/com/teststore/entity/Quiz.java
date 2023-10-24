@@ -27,6 +27,7 @@ public class Quiz {
 
     private int id;
     private String title;
+    private String image;
     private int questions;
     private int category_id;
 }

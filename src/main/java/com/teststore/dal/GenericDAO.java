@@ -237,32 +237,14 @@ public abstract class GenericDAO<T> extends DBContext {
      * @param condition: điều kiện AND hoặc OR
      * @return true: update thành công | false: update thất bại
      */
-    protected boolean updateGenericDAO(T object, String sql, Map<String, Object> parameterMap) {
-        Class<?> clazz = object.getClass();
-        Field[] fields = clazz.getDeclaredFields();
-
+    protected boolean updateGenericDAO(String sql, Map<String, Object> parameterMap) {
         List<Object> parameters = new ArrayList<>();
 
-        for (Field field : fields) {
-            field.setAccessible(true);
-            Object fieldValue;
-            try {
-                fieldValue = field.get(object);
-            } catch (IllegalAccessException e) {
-                fieldValue = null;
-            }
-
-            parameters.add(fieldValue);
-
-        }
-
-        int index = 0;
         for (Map.Entry<String, Object> entry : parameterMap.entrySet()) {
             Object conditionValue = entry.getValue();
 
             parameters.add(conditionValue);
 
-            index++;
         }
 
         try {
@@ -270,7 +252,7 @@ public abstract class GenericDAO<T> extends DBContext {
             connection.setAutoCommit(false);
             statement = connection.prepareStatement(sql);
 
-//            int index = 1;
+            int index = 1;
             for (Object value : parameters) {
                 statement.setObject(index, value);
                 index++;
@@ -280,6 +262,7 @@ public abstract class GenericDAO<T> extends DBContext {
             return true;
         } catch (SQLException e) {
             try {
+                System.err.println("Loi o ham update: " + e.getMessage());
                 connection.rollback();
             } catch (SQLException ex) {
                 System.err.println("4USER: Bắn Exception ở hàm update: " + ex.getMessage());
@@ -309,47 +292,25 @@ public abstract class GenericDAO<T> extends DBContext {
      * @param condition: điều kiện AND hoặc OR
      * @return true: delete thành công | false: delete thất bại
      */
-    protected boolean deleteGenericDAO(Class<T> clazz, Map<String, Object> parameterMap, boolean... condition) {
-        boolean isConditionAnd = condition.length == 0 ? CONDITION_AND : condition[0];
-        StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("DELETE FROM ").append(clazz.getSimpleName());
-
+    protected boolean deleteGenericDAO(String sql, Map<String, Object> parameterMap) {
         List<Object> parameters = new ArrayList<>();
-
-        if (sqlBuilder.charAt(sqlBuilder.length() - 2) == ',') {
-            sqlBuilder.delete(sqlBuilder.length() - 2, sqlBuilder.length());
+        
+        for (Map.Entry<String, Object> entry : parameterMap.entrySet()) {
+            Object conditionValue = entry.getValue();
+            parameters.add(conditionValue);
         }
-
-        if (parameterMap != null && !parameterMap.isEmpty()) {
-            sqlBuilder.append(" WHERE ");
-            int index = 0;
-            for (Map.Entry<String, Object> entry : parameterMap.entrySet()) {
-                String conditionField = entry.getKey();
-                Object conditionValue = entry.getValue();
-
-                if (index > 0) {
-                    // Dùng AND hoặc OR tùy thuộc vào giá trị của useOr
-                    sqlBuilder.append(isConditionAnd ? " AND " : " OR ");
-                }
-
-                sqlBuilder.append(conditionField).append(" = ?");
-                parameters.add(conditionValue);
-
-                index++;
-            }
-        }
-
+        
         try {
             connection = getConnection();
             connection.setAutoCommit(false);
-            statement = connection.prepareStatement(sqlBuilder.toString());
+            statement = connection.prepareStatement(sql);
 
             int index = 1;
             for (Object value : parameters) {
                 statement.setObject(index, value);
                 index++;
             }
-            System.err.println("deleteGenericDAO: " + sqlBuilder.toString());
+            
             statement.executeUpdate();
             connection.commit();
             return true;
@@ -606,4 +567,6 @@ public abstract class GenericDAO<T> extends DBContext {
     }
 
     public abstract List<T> findAll();
+    
+    public abstract int insert(T t);
 }

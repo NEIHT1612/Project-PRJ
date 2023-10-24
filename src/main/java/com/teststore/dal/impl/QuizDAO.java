@@ -100,4 +100,33 @@ public class QuizDAO extends GenericDAO<Quiz> {
         return queryGenericDAO(Quiz.class, sql, parameterMap);
     }
 
+    @Override
+    public int insert(Quiz quiz) {
+        return insertGenericDAO(quiz);
+    }
+
+    public void deleteById(int id) {
+        String sql = "DELETE FROM [dbo].[Quiz]\n"
+                + "      WHERE id = ?";
+        parameterMap = new LinkedHashMap<>();
+        parameterMap.put("id", id);
+        deleteGenericDAO(sql, parameterMap);
+    }
+
+    public void update(Quiz quiz) {
+        String sql = "UPDATE [dbo].[Quiz]\n"
+                + "   SET [title] = ?\n"
+                + "      ,[image] = ?\n"
+                + "      ,[questions] = ?\n"
+                + "      ,[category_id] = ?\n"
+                + " WHERE id = ?";
+        parameterMap = new LinkedHashMap<>();
+        parameterMap.put("title", quiz.getTitle());
+        parameterMap.put("image", quiz.getImage());
+        parameterMap.put("questions", quiz.getQuestions());
+        parameterMap.put("category_id", quiz.getCategory_id());
+        parameterMap.put("id", quiz.getId());
+        updateGenericDAO(sql, parameterMap);
+    }
+
 }
