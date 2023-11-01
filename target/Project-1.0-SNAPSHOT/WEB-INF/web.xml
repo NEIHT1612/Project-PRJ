@@ -20,6 +20,10 @@
         <servlet-name>AuthenServlet</servlet-name>
         <servlet-class>com.teststore.controller.user.AuthenServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>QuizServlet</servlet-name>
+        <servlet-class>com.teststore.controller.user.QuizServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>HomeServlet</servlet-name>
         <url-pattern>/home</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>AuthenServlet</servlet-name>
         <url-pattern>/authen</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>QuizServlet</servlet-name>
+        <url-pattern>/quiz</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -37,6 +37,7 @@
 
             <!-- Footer -->
         <jsp:include page="../../common/user/footer.jsp"></jsp:include>
+        
 
     </body>
     <!-- Bootstrap Scripts -->

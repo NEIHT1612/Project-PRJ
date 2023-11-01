@@ -41,10 +41,10 @@
                         <button class="btn btn-outline-success my-2 my-sm-0 ml-sm-0" type="submit">Search</button>
                     </form>
                 </nav>
-                <button class="btn btn-outline-dark" type="submit">
+<!--                <button class="btn btn-outline-dark" type="submit">
                     <i class="fa-solid fa-cart-shopping"></i>Cart
                     <span class="badge bg-dark text-white mr-auto rounded-pill">0</span>
-                </button>
+                </button>-->
                 <c:if test="${sessionScope.account == null}">
                     <a href="${pageContext.request.contextPath}/authen?action=login">
                         <button class="btn btn-outline-primary ml-2">Login</button>
